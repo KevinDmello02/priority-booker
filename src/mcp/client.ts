@@ -14,6 +14,7 @@ export const mcp = new MCPClient({
  * return no tools and let the agent carry on without weather.
  */
 export async function loadWeatherTools(timeoutMs = 20_000) {
+    if (process.env.DISABLE_WEATHER === "1") return {};
     try {
         const tools = await Promise.race([
             mcp.listTools(),

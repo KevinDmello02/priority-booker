@@ -12,6 +12,9 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
+const verbose = process.env.VERBOSE === "1";
+
+const short = (v: unknown, n = 600) => JSON.stringify(v)?.slice(0, n);
 
 async function consume(
     stream: Awaited<ReturnType<typeof desk.stream>>,
@@ -19,8 +22,16 @@ async function consume(
     for await (const chunk of stream.fullStream) {
         if (chunk.type === "tool-call") {
             console.log(`\n[tool] ${chunk.payload.toolName}`);
+        } else if (chunk.type === "tool-result" && verbose) {
+            console.log(
+                `[result] ${chunk.payload.toolName}: ${short(chunk.payload.result)}`,
+            );
         } else if (chunk.type === "text-delta") {
             process.stdout.write(chunk.payload.text);
+        } else if (chunk.type === "error" && verbose) {
+            console.log("[error]", short(chunk));
+        } else if (chunk.type === "finish" && verbose) {
+            console.log("\n[finish]", short(chunk.payload, 400));
         } else if (chunk.type === "tool-call-approval") {
             const answer = await rl.question(
                 `\n\nApprove booking action? (y/n) `,
