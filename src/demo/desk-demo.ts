@@ -1,6 +1,6 @@
 import readline from "node:readline/promises";
 import { mcp } from "../mcp/client";
-import { mastra } from "../mastra";
+import { langfuseEnabled, mastra } from "../mastra";
 import { listBookings } from "../services/store";
 
 const prompt =
@@ -15,6 +15,12 @@ const rl = readline.createInterface({
 const verbose = process.env.VERBOSE === "1";
 
 const short = (v: unknown, n = 600) => JSON.stringify(v)?.slice(0, n);
+
+console.log(
+    langfuseEnabled
+        ? "Tracing: Langfuse enabled"
+        : "Tracing: off (no Langfuse keys)",
+);
 
 async function consume(
     stream: Awaited<ReturnType<typeof desk.stream>>,
@@ -53,4 +59,5 @@ try {
 } finally {
     rl.close();
     await mcp.disconnect();
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // let the exporter send
 }
