@@ -5,8 +5,7 @@ export type ModelId = `${string}/${string}`;
 type Env = Record<string, string | undefined>;
 
 export type ModelConfig =
-    | ModelId
-    | { id: ModelId; url: string; apiKey: string; api: "chat" };
+    ModelId | { id: ModelId; url: string; apiKey: string; api: "chat" };
 
 export function buildModel(env: Env = process.env): ModelConfig {
     const provider = (env.LLM_PROVIDER ?? "").trim().toLowerCase();
