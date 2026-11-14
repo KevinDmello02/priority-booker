@@ -5,12 +5,11 @@ import { searchExperiences } from "../services/experience-service";
 export const searchExperiencesTool = createTool({
     id: "search-experiences",
     description:
-        "Search airport lounges, spas, sleep pods and cafes. Returns rating, current occupancy percent, available spots and typical duration. Sorted by rating. Full venues are hidden unless includeFull is true.",
+        "Search airport lounges, spas, sleep pods and cafes. Returns rating, current occupancy percent, available spots and typical duration. Sorted by rating. Full venues are hidden. All fields except airport are optional: leave them out if not needed.",
     inputSchema: z.object({
         airport: z.string().describe("IATA airport code, e.g. BOM"),
-        kind: z.enum(["lounge", "spa", "sleep-pod", "cafe"]).optional(),
-        maxDurationMinutes: z.number().int().positive().optional(),
-        includeFull: z.boolean().optional(),
+        kind: z.enum(["lounge", "spa", "sleep-pod", "cafe"]).nullish(),
+        maxDurationMinutes: z.number().positive().nullish(),
     }),
     outputSchema: z.object({
         results: z.array(
@@ -27,5 +26,14 @@ export const searchExperiencesTool = createTool({
             }),
         ),
     }),
-    execute: async (input) => ({ results: searchExperiences(input) }),
+    execute: async ({ airport, kind, maxDurationMinutes }) => ({
+        results: searchExperiences({
+            airport,
+            kind: kind ?? undefined,
+            maxDurationMinutes:
+                maxDurationMinutes != null
+                    ? Math.floor(maxDurationMinutes)
+                    : undefined,
+        }),
+    }),
 });

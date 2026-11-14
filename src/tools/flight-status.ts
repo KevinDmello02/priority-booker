@@ -1,5 +1,7 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
+import { maybeFail } from "../resilience/faults";
+import { withRetry } from "../resilience/retry";
 import { getFlightStatus } from "../services/flight-service";
 
 export const flightStatusTool = createTool({
@@ -24,5 +26,21 @@ export const flightStatusTool = createTool({
             })
             .optional(),
     }),
-    execute: async ({ flightNumber }) => getFlightStatus(flightNumber),
+    execute: async ({ flightNumber }) => {
+        try {
+            return await withRetry(
+                () => {
+                    maybeFail("flight");
+                    return getFlightStatus(flightNumber);
+                },
+                { retries: 1, label: "flight status" },
+            );
+        } catch {
+            return {
+                found: false,
+                message:
+                    "The flight status service is unavailable right now. Do not guess a status or a delay. Tell the traveller and stop.",
+            };
+        }
+    },
 });

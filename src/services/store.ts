@@ -5,12 +5,14 @@ let inventory: Experience[] = seedExperiences();
 let bookingsById = new Map<string, Booking>();
 let bookingsByKey = new Map<string, Booking>();
 let counter = 0;
+let plannedIds: Set<string> | null = null;
 
 export function resetStore(): void {
     inventory = seedExperiences();
     bookingsById = new Map();
     bookingsByKey = new Map();
     counter = 0;
+    plannedIds = null;
 }
 
 export function listExperiences(): Experience[] {
@@ -21,6 +23,16 @@ export function listBookings(): Booking[] {
     return [...bookingsById.values()];
 }
 
+/** Records which items the planner scheduled. Bookings are then limited to these. */
+export function recordPlan(ids: string[]): void {
+    plannedIds = new Set(ids);
+}
+
+function isPlanned(id: string): boolean {
+    // No plan recorded (for example an on-time flight) means no restriction.
+    return plannedIds === null || plannedIds.has(id);
+}
+
 export function createBooking(input: {
     userId: string;
     itemId: string;
@@ -29,6 +41,8 @@ export function createBooking(input: {
     // Idempotency: the same key never creates a second booking.
     const existing = bookingsByKey.get(input.idempotencyKey);
     if (existing) return { ok: true, booking: existing, duplicate: true };
+
+    if (!isPlanned(input.itemId)) return { ok: false, reason: "NOT_PLANNED" };
 
     const item = inventory.find((e) => e.id === input.itemId);
     if (!item) return { ok: false, reason: "NOT_FOUND" };

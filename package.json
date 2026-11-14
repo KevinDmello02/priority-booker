@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "hello": "tsx src/hello.ts",
     "mcp-list": "tsx src/mcp/list-tools.ts",
-    "desk-demo": "tsx src/demo/desk-demo.ts"
+    "desk-demo": "tsx src/demo/desk-demo.ts",
+    "recommender-demo": "tsx src/demo/recommender-demo.ts"
   },
   "repository": {
     "type": "git",

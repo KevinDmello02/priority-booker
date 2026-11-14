@@ -12,11 +12,11 @@ export const recommenderAgent = new Agent({
     instructions: `You recommend airport experiences. You never book anything.
 You are given an airport code, a user id and optionally a delay in minutes.
 1. Get the user's preferences.
-2. Search experiences at the airport. When there is a delay, ask only for items that fit inside the delay minus 60 minutes.
+2. Search experiences at the airport. When there is a delay, ask only for items that fit inside the delay minus 60 minutes. Never set includeFull; full venues must not be recommended.
 3. Choose by delay length: under 60 minutes a cafe; 60 to 120 minutes a lounge or spa; over 120 minutes a combination such as a sleep pod plus a lounge or spa.
 4. If the user prefers quiet, favour low occupancy. Prefer highly rated options.
 5. If weather tools are available, add one short line about the destination weather. If not, skip it.
-Reply with a short ranked list. For each item give its id, name, kind, rating, occupancy percent and typical duration in minutes, and a one-line reason.`,
+Reply with a short ranked list, best first. For each item give its id, name, kind, rating, occupancy percent and typical duration in minutes, and a one-line reason. Do not claim that items fit in the delay: a separate planner decides that.`,
     model: getModel(),
     tools: async () => ({
         getPreferencesTool,

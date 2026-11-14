@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createBooking, listBookings, resetStore } from "./store";
+import { createBooking, listBookings, recordPlan, resetStore } from "./store";
 import { getFlightStatus } from "./flight-service";
 import { searchExperiences } from "./experience-service";
 import { getPreferences } from "./preference-service";
@@ -83,6 +83,39 @@ describe("booking store", () => {
                 idempotencyKey: "k3",
             }),
         ).toEqual({ ok: false, reason: "NOT_FOUND" });
+    });
+    it("only books items the planner scheduled", () => {
+        recordPlan(["bom-quiet-haven"]);
+        expect(
+            createBooking({
+                userId: "u",
+                itemId: "bom-aroma-spa",
+                idempotencyKey: "p1",
+            }),
+        ).toEqual({
+            ok: false,
+            reason: "NOT_PLANNED",
+        });
+        expect(
+            createBooking({
+                userId: "u",
+                itemId: "bom-quiet-haven",
+                idempotencyKey: "p2",
+            }).ok,
+        ).toBe(true);
+    });
+    it("blocks all bookings when the plan is empty", () => {
+        recordPlan([]);
+        expect(
+            createBooking({
+                userId: "u",
+                itemId: "bom-quiet-haven",
+                idempotencyKey: "p3",
+            }),
+        ).toEqual({
+            ok: false,
+            reason: "NOT_PLANNED",
+        });
     });
 });
 

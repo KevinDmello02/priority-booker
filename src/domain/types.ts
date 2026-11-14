@@ -40,4 +40,4 @@ export interface Booking {
 
 export type BookingResult =
     | { ok: true; booking: Booking; duplicate: boolean }
-    | { ok: false; reason: "NOT_FOUND" | "FULL" };
+    | { ok: false; reason: "NOT_FOUND" | "FULL" | "NOT_PLANNED" };
