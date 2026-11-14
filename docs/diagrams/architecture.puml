@@ -20,7 +20,7 @@ rectangle "Approval gate\n(user confirms)" as G
 
 package "Tools" {
   component "get-flight-status" as T1
-  component "search-lounges" as T2
+  component "search-experiences" as T2
   component "get-preferences" as T3
   component "book-item" as T4
 }

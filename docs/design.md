@@ -18,13 +18,13 @@ A flight-disruption assistant for Priority Pass-style members. It recommends air
 
 ## 3. Agents and responsibilities
 
-| Agent               | Responsibility                                                            | Tools                                        | Can write?               |
-| ------------------- | ------------------------------------------------------------------------- | -------------------------------------------- | ------------------------ |
-| Orchestrator (desk) | Understand the request, delegate, summarise                               | none (delegates only)                        | No                       |
-| Flight Tracker      | Flight status and delay duration                                          | get-flight-status                            | No                       |
-| Recommender         | Rank lounges, spa, sleep pods, cafes for the delay length and preferences | search-lounges, get-preferences, weather MCP | No                       |
-| Booker              | Book the selected items                                                   | book-item (approval required)                | Yes, only after approval |
-| Planner (code)      | Pack items into the window: delay minus buffer                            | none (pure function, no LLM)                 | No                       |
+| Agent               | Responsibility                                                            | Tools                                            | Can write?               |
+| ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------ |
+| Orchestrator (desk) | Understand the request, delegate, summarise                               | none (delegates only)                            | No                       |
+| Flight Tracker      | Flight status and delay duration                                          | get-flight-status                                | No                       |
+| Recommender         | Rank lounges, spa, sleep pods, cafes for the delay length and preferences | search-experiences, get-preferences, weather MCP | No                       |
+| Booker              | Book the selected items                                                   | book-item (approval required)                    | Yes, only after approval |
+| Planner (code)      | Pack items into the window: delay minus buffer                            | none (pure function, no LLM)                     | No                       |
 
 ## 4. Rules
 
