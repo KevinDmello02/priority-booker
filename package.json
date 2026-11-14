@@ -10,7 +10,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "hello": "tsx src/hello.ts",
-    "mcp-list": "tsx src/mcp/list-tools.ts"
+    "mcp-list": "tsx src/mcp/list-tools.ts",
+    "desk-demo": "tsx src/demo/desk-demo.ts"
   },
   "repository": {
     "type": "git",
