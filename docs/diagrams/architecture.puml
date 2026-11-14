@@ -1,0 +1,47 @@
+@startuml architecture
+title Priority Booker - Architecture
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "User / CLI" as User
+rectangle "Trigger\n(T-4h or flight delay)" as Trigger
+
+package "Agents" {
+  component "Orchestrator" as O
+  component "Flight Tracker" as FT
+  component "Recommender" as R
+  component "Booker" as B
+}
+
+component "Planner\n(deterministic code)" as P
+
+rectangle "Approval gate\n(user confirms)" as G
+
+package "Tools" {
+  component "get-flight-status" as T1
+  component "search-lounges" as T2
+  component "get-preferences" as T3
+  component "book-item" as T4
+}
+
+package "External MCP server" {
+  component "weather MCP\n(open-meteo)" as M1
+}
+
+component "Langfuse\n(tracing)" as LF
+
+User --> O
+Trigger --> O
+O --> FT : delegate
+O --> R : delegate
+O --> P : pack itinerary
+O --> B : delegate
+FT --> T1 : read
+R --> T2 : read
+R --> T3 : read
+R ..> M1 : read
+B --> G
+G --> T4 : write, only if approved
+O ..> LF : traces
+@enduml
