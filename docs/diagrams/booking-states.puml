@@ -1,0 +1,18 @@
+@startuml booking-states
+title Booking state machine
+skinparam shadowing false
+
+[*] --> Proposed
+Proposed --> AwaitingApproval : user selects items
+AwaitingApproval --> Declined : user declines
+AwaitingApproval --> CapacityCheck : user approves
+CapacityCheck --> Confirmed : capacity ok
+CapacityCheck --> Proposed : lounge full, re-recommend
+CapacityCheck --> Failed : tool error
+Failed --> CapacityCheck : retry (max 2)
+Failed --> AskUser : retries exhausted
+Confirmed --> Confirmed : duplicate confirmation ignored
+Declined --> [*]
+Confirmed --> [*]
+AskUser --> [*]
+@enduml
