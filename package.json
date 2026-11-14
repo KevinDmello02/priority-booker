@@ -31,8 +31,10 @@
   },
   "dependencies": {
     "@mastra/core": "^1.83.0",
+    "@mastra/langfuse": "^1.6.6",
     "@mastra/libsql": "^1.30.0",
     "@mastra/mcp": "^2.9.0",
+    "@mastra/observability": "^1.24.0",
     "dotenv": "^18.0.10",
     "zod": "^4.6.7"
   },
