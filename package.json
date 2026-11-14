@@ -1,0 +1,40 @@
+{
+  "name": "priority-booker",
+  "version": "1.0.0",
+  "description": "Agentic flight-disruption assistant (Mastra + TypeScript). Work in progress.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "hello": "tsx src/hello.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinDmello02/priority-booker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/KevinDmello02/priority-booker/issues"
+  },
+  "homepage": "https://github.com/KevinDmello02/priority-booker#readme",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "@mastra/core": "^1.83.0",
+    "dotenv": "^18.0.10",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
